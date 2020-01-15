@@ -40,7 +40,7 @@ class _FlutterClockState extends State<FlutterClock> {
   double angle = 0;
   double angleMinute = 0;
   double angleHour = 0;
-  int prev_sec = 0;
+  int prevSec = 0;
   int sec = 0;
   int mill = 0;
   int preHour = 0;
@@ -54,13 +54,13 @@ class _FlutterClockState extends State<FlutterClock> {
 
 //Calculating Degree for seconds
         int sec = _now.second;
-        if (_now.second != prev_sec) mill = _now.millisecond;
+        if (_now.second != prevSec) mill = _now.millisecond;
         angle = double.parse(_now.second.toString() +
                 '.' +
                 (_now.millisecond - mill).toString()) *
             pi /
             30;
-        prev_sec = _now.second;
+        prevSec = _now.second;
 //Calculating degree for mintues
         angleMinute = (_now.second + _now.minute * 60) / 10 * pi / 180;
 
@@ -83,6 +83,7 @@ class _FlutterClockState extends State<FlutterClock> {
     // TODO: implement dispose
     super.dispose();
     SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
   }
