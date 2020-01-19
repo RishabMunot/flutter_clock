@@ -36,13 +36,20 @@ class _FlutterClockState extends State<FlutterClock> {
   int mill = 0;
   int preHour = 0;
   int nowHour = 0;
+  var w, h;
+  var ws, wm, wh;
+  var off_x, off_y;
+  String day = "", date1 = "", date2 = "";
+  double zoomout = 0;
 
   @override
   void initState() {
     Timer.periodic(Duration(milliseconds: 105), (v) {
       setState(() {
         _now = DateTime.now();
-
+        day = DateFormat('EEEE').format(_now);
+        date1 = DateFormat('d').format(_now);
+        date2 = DateFormat('MMM').format(_now);
 //Calculating Degree for seconds
         int sec = _now.second;
         if (_now.second != prevSec) mill = _now.millisecond;
@@ -53,7 +60,11 @@ class _FlutterClockState extends State<FlutterClock> {
             30;
         prevSec = _now.second;
 //Calculating degree for mintues
-        angleMinute = (_now.second + _now.minute * 60) / 10 * pi / 180;
+        angleMinute =
+            ((_now.second + _now.minute * 60 + _now.millisecond / 1000) / 10 +
+                    126.3) *
+                pi /
+                180;
 
 //Caluculating degree for hour
         nowHour = _now.hour;
@@ -65,7 +76,7 @@ class _FlutterClockState extends State<FlutterClock> {
     });
     super.initState();
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
     ]);
   }
 
@@ -74,16 +85,21 @@ class _FlutterClockState extends State<FlutterClock> {
     // TODO: implement dispose
     super.dispose();
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    var w = MediaQuery.of(context).size.width;
-    var h = MediaQuery.of(context).size.height;
-    // print(DateFormat.s().format(_now));
+    zoomout = 0.09;
+    w = MediaQuery.of(context).size.width;
+    h = MediaQuery.of(context).size.height;
+    ws = (2 * 74 * w / 55) * (1 - zoomout);
+    wm = ws * 63 / 74;
+    wh = ws * 52 / 74;
+    off_x = w*0.07;
+    off_y = w*0.05;
+
     return Scaffold(
         backgroundColor: Color(0xffeaeaea),
         body: SafeArea(
@@ -91,67 +107,118 @@ class _FlutterClockState extends State<FlutterClock> {
             children: <Widget>[
 //SECOND
               Positioned(
-                top: 2.5 * h / 3 - w - 15,
-                left: -2 * w + w * 0.7 - 50,
+                bottom: -ws / 2 + w * 0.15 - ws * zoomout / 2 +off_y,
+                right: 2 * w / 5 - w * 0.06 + ws * zoomout / 2-off_x,
                 child: Transform.rotate(
                   angle: -angle,
                   // angle: 0,
                   child: Image.asset(
                     'images/seconds_face.png',
-                    height: 2 * w,
+                    height: ws,
                   ),
                 ),
               ),
 
 // MINUTE
               Positioned(
-                top: 2.5 * h / 3 - w + 9 * w / 74,
-                left: -2 * w + w * 0.7 + 9 * w / 74 - 50,
+                bottom: -wm / 2 +w * 0.15 - wm * zoomout / 2+off_y,
+                right: 3 * w / 5 - w * 0.06 + wm * zoomout / 2-off_x,
                 child: Transform.rotate(
                   angle: 126 * pi / 180 - angleMinute,
                   child: Image.asset(
                     'images/minutes_face.png',
-                    // fit: BoxFit.fitWidth,
-                    height: 126 * w / 74,
+                    height: wm,
                   ),
                 ),
               ),
 
 //HOUR
               Positioned(
-                top: 2.5 * h / 3 - w + 18 * w / 74 + 15,
-                left: -2 * w + w * 0.7 + 18 * w / 74 - 50,
+                bottom: -wh / 2 + w * 0.15 - wh * zoomout / 2+off_y,
+                right: 4 * w / 5 - w * 0.06 + wh * zoomout / 2-off_x,
                 child: Transform.rotate(
                   angle: -angleHour,
                   child: Image.asset(
                     'images/hours_face.png',
-                    // fit: BoxFit.fitWidth,
-                    height: 104 * w / 74,
+                    height: wh,
                   ),
                 ),
               ),
-//RULER LINE
+
+// overlay hour
               Positioned(
-                bottom: 40,
-                child: Container(
-                  height: 2,
-                  width: w,
-                  color: Colors.blue,
+                child: Image.asset(
+                  'images/overlay.png',
+                  height: h * 0.3 * (1 - zoomout),
                 ),
+                bottom: off_y,
+                left: off_x,
               ),
 
-Positioned(
-  child: Image.asset(
-    'images/overlay.png',
-    height: 200,
-  ),
-  top: 0,
-  right: 0,
-)
+// overlay minute
+              Positioned(
+                child: Image.asset(
+                  'images/overlay.png',
+                  height: h * 0.3 * (1 - zoomout),
+                ),
+                bottom: off_y,
+                left: w / 5 * (1 - zoomout)+off_x,
+              ),
 
+// overlay second
+              Positioned(
+                child: Image.asset(
+                  'images/overlay.png',
+                  height: h * 0.3 * (1 - zoomout),
+                ),
+                bottom: off_y,
+                left: 2 * w / 5 * (1 - zoomout) + w * 0.01+off_x,
+              ),
+
+//TIME STAMP
+              Positioned(
+                top: 50,
+                right: 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      day,
+                      style: TextStyle(
+                        fontFamily: 'Quicksand',
+                        fontSize: w / 10 / 66 * 40,
+                      ),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.fromLTRB(w*0.02, 0, 0,0),
+                          child: Text(
+                            date1,
+                            style: TextStyle(
+                              fontFamily: 'Quicksand',
+                              fontSize: w / 10,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 0,0, w*0.015),
+                          child: Text(
+                            date2,
+                            style: TextStyle(
+                              fontFamily: 'Quicksand',
+                              fontSize: w / 10 / 66 * 24,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ));
   }
 }
-
