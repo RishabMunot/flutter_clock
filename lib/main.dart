@@ -14,15 +14,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: FlutterClock(),
@@ -118,7 +109,6 @@ class _FlutterClockState extends State<FlutterClock> {
                 left: -2 * w + w * 0.7 + 9 * w / 74 - 50,
                 child: Transform.rotate(
                   angle: 126 * pi / 180 - angleMinute,
-                  // angle: 0,
                   child: Image.asset(
                     'images/minutes_face.png',
                     // fit: BoxFit.fitWidth,
@@ -132,7 +122,6 @@ class _FlutterClockState extends State<FlutterClock> {
                 top: 2.5 * h / 3 - w + 18 * w / 74 + 15,
                 left: -2 * w + w * 0.7 + 18 * w / 74 - 50,
                 child: Transform.rotate(
-                  // angle: 126 * pi / 180 - angleHour,
                   angle: -angleHour,
                   child: Image.asset(
                     'images/hours_face.png',
@@ -141,7 +130,7 @@ class _FlutterClockState extends State<FlutterClock> {
                   ),
                 ),
               ),
-              //RULER LINE
+//RULER LINE
               Positioned(
                 bottom: 40,
                 child: Container(
@@ -150,121 +139,19 @@ class _FlutterClockState extends State<FlutterClock> {
                   color: Colors.blue,
                 ),
               ),
-              // Positioned(
-              //   top: h / 2 - 4 * w / 3,
-              //   right: w / 3,
-              //   child: CircleAvatar(
-              //     backgroundColor: Colors.tealAccent,
-              //     radius: 4 * w / 3,
-              //   ),
-              // ),
-              // Positioned(
-              //   top: h / 2 - w,
-              //   right: 2 * w / 3,
-              //   child: CircleAvatar(
-              //     radius: w,
-              //   ),
-              // ),
 
-              // // Positioned(
-              //   right: 0,
-              //   top: h / 2 - 50,
-              //   child: Container(
-              //     padding: EdgeInsets.all(15.0),
-              //     width: w,
-              //     height: 100.0,
-              //     color: Colors.black38,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: <Widget>[
-              //         Container(
-              //           child: Text(
-              //             DateFormat.H().format(_now),
-              //             style: TextStyle(fontSize: 45.0, color: Colors.white),
-              //           ),
-              //         ),
-              //         Container(
-              //           child: Text(
-              //             DateFormat.m().format(_now),
-              //             style: TextStyle(fontSize: 45.0, color: Colors.white),
-              //           ),
-              //         ),
-              //         Container(
-              //           child: Text(
-              //             DateFormat.s().format(_now),
-              //             style: TextStyle(fontSize: 45.0, color: Colors.white),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+Positioned(
+  child: Image.asset(
+    'images/overlay.png',
+    height: 200,
+  ),
+  top: 0,
+  right: 0,
+)
+
             ],
           ),
         ));
   }
 }
 
-// class Animated extends StatefulWidget {
-//   Animated({Key key}) : super(key: key);
-
-//   @override
-//   _AnimatedState createState() => _AnimatedState();
-// }
-
-// class _AnimatedState extends State<Animated> with TickerProviderStateMixin {
-//   AnimationController _controller;
-//   Animation _animation;
-//   double angle = 60;
-
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     _controller =
-//         AnimationController(vsync: this, duration: Duration(seconds: 1));
-//     _controller.addListener(() {
-//       setState(() {
-//         angle = _controller.value * 10;
-//       });
-//     });
-//     _controller.repeat();
-//   }
-
-//   @override
-//   void dispose() {
-//     // TODO: implement dispose
-//     super.dispose();
-//     _controller.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Column(
-//           children: <Widget>[
-//             // AnimatedContainer(
-//             //   duration: Duration(seconds: 2),
-//             //   child: CircleAvatar(
-//             //     radius: 100.0,
-//             //   ),
-//             //   transform: Matrix4.ro(10),
-//             // )
-//             Transform.rotate(
-//               angle: angle,
-//               // child: CircleAvatar(
-//               //   radius: 100.0,
-//               // ),
-//               child: Container(
-//                 width: 100.0,
-//                 height: 100.0,
-//                 color: Colors.blue,
-//               ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
